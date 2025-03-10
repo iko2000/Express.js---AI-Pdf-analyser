@@ -5,8 +5,14 @@ const PDFParser = require('pdf-parse');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
+require('dotenv').config();
+const { Resend } = require('resend'); // Import Resend
+
+// Initialize Resend with your API key
 
 router.use(express.json());
+const resend = new Resend(process.env.RESEND_API_KEY); // Make sure to set this environment variable
+
 
 router.get("/", (req, res) => {
   res.json("Hello from file route.")
@@ -59,17 +65,38 @@ router.post('/', upload.single('file'), async (req, res) => {
     try {
       const chatGptResponse = await sendToChatGPT(data.text);
       
-      // Return success response with summary
-      res.json({
-        filename: req.file.originalname,
-        filesize: req.file.size,
-        summary: chatGptResponse,
-        message: 'PDF content has been analyzed'
-      });
+      // New: Send the analysis via email
+      try {
+        const emailResponse = await sendAnalysisEmail(
+          req.file.originalname,
+          chatGptResponse
+        );
+                
+        // Return success response with summary and email status
+        res.json({
+          filename: req.file.originalname,
+          filesize: req.file.size,
+          summary: chatGptResponse,
+          emailSent: true,
+          emailId: emailResponse.id,
+          message: 'PDF content has been analyzed and emailed'
+        });
+      } catch (emailError) {
+        console.error('Error sending email:', emailError);
+        // Still return the analysis even if email fails
+        res.json({
+          filename: req.file.originalname,
+          filesize: req.file.size,
+          summary: chatGptResponse,
+          emailSent: false,
+          emailError: emailError.message,
+          message: 'PDF content has been analyzed but email sending failed'
+        });
+      }
     } catch (apiError) {
       console.error('Error calling ChatGPT API:', apiError);
-      res.status(500).json({ 
-        error: 'Failed to analyze PDF with ChatGPT', 
+      res.status(500).json({
+        error: 'Failed to analyze PDF with ChatGPT',
         details: apiError.message,
         filename: req.file.originalname,
         filesize: req.file.size
@@ -122,6 +149,56 @@ async function sendToChatGPT(text) {
   } catch (error) {
     console.error('ChatGPT API Error:', error.response?.data || error.message);
     throw new Error('Failed to get analysis from ChatGPT: ' + (error.response?.data?.error?.message || error.message));
+  }
+}
+
+// New function to send email using Resend
+async function sendAnalysisEmail(filename, analysis) {  
+ 
+  try {
+    const response = await resend.emails.send({
+      from: 'PDF Analysis <info@aldb.mt>', // Use your own domain here
+      to: ["shengelia1800@gmail.com", "iviko.shengelia.1@iliauni.edu.ge"],
+      subject: `Safety Document Analysis: ${filename}`,
+      html: `
+        <html>
+          <head>
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              h1 { color: #2c3e50; }
+              .analysis { 
+                background-color: #f9f9f9; 
+                padding: 15px; 
+                border-left: 4px solid #3498db;
+                margin: 20px 0;
+              }
+              .footer { font-size: 12px; color: #7f8c8d; margin-top: 30px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Safety Document Analysis</h1>
+              <p>An analysis has been completed for the document: <strong>${filename}</strong></p>
+              
+              <h2>Recommended Improvements:</h2>
+              <div class="analysis">
+                ${analysis.replace(/\n/g, '<br>')}
+              </div>
+              
+              <div class="footer">
+                <p>This is an automated message sent by your PDF Analysis System.</p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+    
+    return response;
+  } catch (error) {
+    console.error('Resend API Error:', error);
+    throw new Error('Failed to send email: ' + error.message);
   }
 }
 

@@ -15,6 +15,7 @@
     "axios": "^1.8.2",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-validator": "^7.0.1",
@@ -25,6 +26,7 @@
     "multer-s3": "^2.10.0",
     "nodemon": "^3.1.0",
     "pdf-parse": "^1.1.1",
-    "pdfreader": "^3.0.7"
+    "pdfreader": "^3.0.7",
+    "resend": "^4.1.2"
   }
 }
