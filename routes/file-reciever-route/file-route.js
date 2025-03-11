@@ -158,7 +158,7 @@ async function sendAnalysisEmail(filename, analysis) {
   try {
     const response = await resend.emails.send({
       from: 'PDF Analysis <info@aldb.mt>', // Use your own domain here
-      to: ["shengelia1800@gmail.com", "iviko.shengelia.1@iliauni.edu.ge"],
+      to: ["shengelia1800@gmail.com", "charlot.caruana@aldb.mt"],
       subject: `Safety Document Analysis: ${filename}`,
       html: `
         <html>
@@ -187,7 +187,7 @@ async function sendAnalysisEmail(filename, analysis) {
               </div>
               
               <div class="footer">
-                <p>This is an automated message sent by your PDF Analysis System.</p>
+                <p>This is an automated message sent by ALDB&Associates</p>
               </div>
             </div>
           </body>

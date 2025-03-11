@@ -1,0 +1,1 @@
+This is Express.js server, used to get PDF health/safety reports, analyse it via OPEN AI and trigger email to client about further instructions what can be improved.
