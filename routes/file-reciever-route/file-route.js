@@ -158,7 +158,7 @@ async function sendAnalysisEmail(filename, analysis) {
   try {
     const response = await resend.emails.send({
       from: 'PDF Analysis <info@aldb.mt>', // Use your own domain here
-      to: ["shengelia1800@gmail.com", "charlot.caruana@aldb.mt"],
+      to: ["shengelia1800@gmail.com", "charlot.caruana@aldb.mt", "clint.mallia@aldb.mt", "aldo.busuttil@aldb.mt"],
       subject: `Safety Document Analysis: ${filename}`,
       html: `
         <html>
