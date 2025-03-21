@@ -3,6 +3,8 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const fileroute = require('./routes/file-reciever-route/file-route')
+const Datasaverroute = require('./routes/dataretriever/data-route');
+
 require('dotenv').config();
 app.use(cors());
 
@@ -22,6 +24,8 @@ app.get('/', (req, res) => {
   });
 
 app.use('/fileroute', fileroute);
+app.use('/datasaver', Datasaverroute);
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
