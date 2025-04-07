@@ -59,7 +59,20 @@ router.post('/', async (req, res) => {
     if (!jsonData) {
       return res.status(400).json({ error: "Missing JSON data" });
     }
-    
+
+    const { data: existingReports, error: queryError } = await supabase
+            .from('inteligentdata')
+            .select('id, created_at')
+            .eq('report_number', jsonData.Entry.AnswersJson.p1.reportNum);  
+
+        if (queryError) {
+          return res.status(500).json({ error: queryError.message });
+        }
+
+        if (existingReports && existingReports.length > 0) {
+            return res.status(500).json({ message: 'Record Already exist in Database' });
+        }
+
     // Extract risk ratings
     const sectionRatings = extractRiskRatings(jsonData);
     
