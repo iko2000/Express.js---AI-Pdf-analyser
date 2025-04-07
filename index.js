@@ -31,7 +31,10 @@ app.use('/datasaver', Datasaverroute);
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  dbName: 'reports'
+  dbName: 'reports',
+  ssl: true,
+  tls: true,
+  tlsAllowInvalidCertificates: false
 })
 .then(() => {
   console.log('MongoDB connected successfully');
