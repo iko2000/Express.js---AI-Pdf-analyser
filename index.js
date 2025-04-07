@@ -34,7 +34,8 @@ mongoose.connect(process.env.MONGODB_URI, {
   dbName: 'reports',
   ssl: true,
   tls: true,
-  tlsAllowInvalidCertificates: false
+  tlsInsecure: false, // Don't use in production normally
+  serverSelectionTimeoutMS: 5000 // Will error out faster for debugging
 })
 .then(() => {
   console.log('MongoDB connected successfully');
