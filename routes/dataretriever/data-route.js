@@ -8,29 +8,44 @@ const supabase = require("../../db/db");
 // Initialize Mongoose connection
 const mongoose = require("mongoose");
 
-// IMPORTANT: Connect to the specific reports database
-// Make sure the MONGODB_URI environment variable does NOT include the database name
-// We explicitly specify the database name here
+// MongoDB connection string
 const MONGODB_URI = process.env.MONGODB_URI;
 const dbName = 'reports';
 
-// Connect to the reports database
+// Improved connection options
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  dbName: dbName // This ensures we connect to the reports database
+  dbName: dbName,
+  serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+  socketTimeoutMS: 45000, // Increase socket timeout
+  connectTimeoutMS: 30000, // Increase connection timeout
+  bufferCommands: false, // Disable command buffering
 })
 .then(() => console.log(`MongoDB connected successfully to '${dbName}' database`))
-.catch(err => console.error("MongoDB connection error:", err));
+.catch(err => {
+  console.error("MongoDB connection error:", err);
+  process.exit(1); // Exit process if we can't connect to the database
+});
+
+// Handle Mongoose connection events
+mongoose.connection.on('connected', () => {
+  console.log(`Mongoose connection opened to ${dbName} database`);
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('Mongoose connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('Mongoose disconnected');
+});
 
 // Create a model for the analytical_report collection
-// By using the existing collection name, Mongoose will use that collection
-// Note: In Mongoose, model name should be singular and Pascal case
-// But we can specify the exact collection name as the third parameter
 const AnalyticalReport = mongoose.model(
   'AnalyticalReport', 
   new mongoose.Schema({}, { strict: false }), 
-  'analytical_report' // This specifies the exact collection name
+  'analytical_report'
 );
 
 // Middleware for parsing JSON
@@ -38,12 +53,24 @@ router.use(express.json());
 
 // Test route
 router.get("/", async (req, res) => {
-  res.json("Test");
+  res.json("MongoDB Connection Status: " + mongoose.connection.readyState);
 });
 
 // Route for receiving JSON data and saving to both Supabase and MongoDB
 router.post('/', async (req, res) => {
   try {
+    // Check MongoDB connection first
+    if (mongoose.connection.readyState !== 1) {
+      console.error("MongoDB not connected. Current state:", mongoose.connection.readyState);
+      // Try to reconnect
+      await mongoose.connect(MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        dbName: dbName,
+        serverSelectionTimeoutMS: 30000,
+      });
+    }
+    
     // Get JSON data from request body
     const jsonData = req.body;
     
@@ -55,7 +82,7 @@ router.post('/', async (req, res) => {
     const { data: supabaseData, error: supabaseError } = await supabase
       .from('inteligentdata')
       .insert([
-        { json: jsonData }  // Insert into the 'json' column
+        { json: jsonData }
       ]);
     
     if (supabaseError) {
@@ -63,15 +90,16 @@ router.post('/', async (req, res) => {
       return res.status(500).json({ error: supabaseError.message });
     }
     
-    // STEP 2: Insert raw JSON into MongoDB analytical_report collection
-    // This uses a schemaless model that accepts any JSON structure
-    const mongoDocument = new AnalyticalReport(jsonData);
+    // STEP 2: Insert raw JSON into MongoDB
+    // Only include necessary fields - no need for Mongoose methods/properties
+    const mongoData = {
+      ...jsonData,
+      _created_at: new Date()
+    };
     
-    // Add timestamp for reference
-    mongoDocument._created_at = new Date();
-    
-    // Save to MongoDB
-    const savedDocument = await mongoDocument.save();
+    // Use the native MongoDB driver directly for more control
+    const result = await mongoose.connection.db.collection('analytical_report')
+      .insertOne(mongoData);
     
     // Return success response
     return res.status(200).json({
@@ -79,14 +107,19 @@ router.post('/', async (req, res) => {
       message: "Data inserted successfully into both databases",
       supabase: supabaseData,
       mongodb: {
-        id: savedDocument._id
+        id: result.insertedId
       }
     });
     
   } catch (error) {
     console.error("Server error:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ 
+      error: "Internal server error", 
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
+module.exports = router;
 module.exports = router;
