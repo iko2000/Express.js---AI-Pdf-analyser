@@ -54,7 +54,15 @@ router.post('/', async (req, res) => {
   try {
     // Get JSON data from request body
     const jsonData = req.body;
-    
+    const { data: sup, error: superror } = await supabase
+    .from('inteligentdata')
+    .insert({
+      json: jsonData}
+    );
+    if (superror) { 
+      return res.status(500).json({ error: superror.message });
+    }
+
     if (!jsonData) {
       return res.status(400).json({ error: "Missing JSON data" });
     }
