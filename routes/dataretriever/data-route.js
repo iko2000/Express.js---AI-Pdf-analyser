@@ -1,20 +1,11 @@
 const express = require("express");
 const router = express.Router();
 require('dotenv').config();
+const mongoose = require('mongoose');
 
 // Initialize Supabase client
 const supabase = require("../../db/db");
 
-// Initialize Mongoose connection
-const mongoose = require("mongoose");
-
-// Connect to MongoDB - specify the database name 'reports'
-mongoose.connect(process.env.MONGODB_URI + '/reports', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB connected successfully to 'reports' database"))
-.catch(err => console.error("MongoDB connection error:", err));
 
 // Create a simple MongoDB collection with the specific name 'analytical_report'
 const AnalyticalReport = mongoose.model('analytical_report', new mongoose.Schema({}, { strict: false }));
