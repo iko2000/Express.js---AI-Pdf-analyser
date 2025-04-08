@@ -4,7 +4,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fileroute = require('./routes/file-reciever-route/file-route')
 const Datasaverroute = require('./routes/dataretriever/data-route');
-const Cronroute = require('./routes/cron/cron');
 
 require('dotenv').config();
 app.use(cors());
@@ -26,7 +25,6 @@ app.get('/', (req, res) => {
 
 app.use('/fileroute', fileroute);
 app.use('/datasaver', Datasaverroute);
-app.use('/cron', Cronroute);
 
 
 

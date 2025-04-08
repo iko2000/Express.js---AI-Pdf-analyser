@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "devstart": "nodemon index.js"
+    "devstart": "nodemon index.js",
+    "cronstart": "node routes/cron/cron.js"
   },
   "author": "",
   "license": "ISC",

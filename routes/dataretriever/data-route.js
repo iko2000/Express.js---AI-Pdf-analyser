@@ -87,6 +87,8 @@ router.post('/', async (req, res) => {
       author: jsonData.Entry.AnswersJson.p1.saveInspector,
       customer_code: jsonData.Entry.AnswersJson.p1.saveCustomer,
       report_number: jsonData.Entry.AnswersJson.p1.reportNum,
+      start_time: jsonData.Entry.StartTime,
+      end_time: jsonData.Entry.CompleteTime,
     };
     
     // Add columns for each section and rating type
