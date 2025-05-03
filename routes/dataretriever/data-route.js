@@ -80,7 +80,7 @@ router.post('/', async (req, res) => {
     // Prepare data object for Supabase insertion
     const dataToInsert = {
       // Include the original JSON data
-      json: jsonData,
+      // json: jsonData,
       project_code: jsonData.Entry.AnswersJson.p1.projectCode,
       customer_name: jsonData.Entry.AnswersJson.p1.CustomerName,
       date: jsonData.Entry.AnswersJson.p1.date,
