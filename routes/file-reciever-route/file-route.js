@@ -192,10 +192,10 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
           </head>
           <body>
             <div class="container">
-             <h1>Please find attached the Health & Safety Inspection Report related to the ongoing project referenced above. This report has been compiled in accordance with the scope of services agreed upon with the commissioning client and reflects
- the site conditions observed during the time of the inspection.</h1>
+             <h3>Please find attached the Health & Safety Inspection Report related to the ongoing project referenced above. This report has been compiled in accordance with the scope of services agreed upon with the commissioning client and reflects
+ the site conditions observed during the time of the inspection.</h3>
               <p>Recipients should be: ${externalrecipients} </p>
-              <h2>Below is a summary of key findings noted during the visit:</h2>
+              <h4>Below is a summary of key findings noted during the visit:</h4>
               <div class="analysis">
                 ${analysis.replace(/\n/g, '<br>')}
               </div>
@@ -205,9 +205,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
               Should you require any further clarification or wish to discuss any aspect of the report, please do not hesitate to get in touch. 
               Thank you for your continued collaboration.
               </h5>
-              <div class="footer">
-                <p>This is an automated message sent by ALDB&Associates</p>
-              </div>
+              
             </div>
           </body>
         </html>
