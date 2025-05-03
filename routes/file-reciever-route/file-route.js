@@ -65,11 +65,12 @@ router.post('/', upload.single('file'), async (req, res) => {
     try {
       const chatGptResponse = await sendToChatGPT(data.text);
       
-      // New: Send the analysis via email
+      // New: Send the analysis via email with the PDF attachment
       try {
         const emailResponse = await sendAnalysisEmail(
           req.file.originalname,
-          chatGptResponse
+          chatGptResponse,
+          dataBuffer  // Pass the PDF data buffer
         );
                 
         // Return success response with summary and email status
@@ -79,7 +80,7 @@ router.post('/', upload.single('file'), async (req, res) => {
           summary: chatGptResponse,
           emailSent: true,
           emailId: emailResponse.id,
-          message: 'PDF content has been analyzed and emailed'
+          message: 'PDF content has been analyzed and emailed with attachment'
         });
       } catch (emailError) {
         console.error('Error sending email:', emailError);
@@ -111,7 +112,6 @@ router.post('/', upload.single('file'), async (req, res) => {
     res.status(500).json({ error: 'Failed to read PDF file', details: error.message });
   }
 });
-
 // Function to send text to ChatGPT API
 async function sendToChatGPT(text) {
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Make sure to set this environment variable
@@ -153,8 +153,7 @@ async function sendToChatGPT(text) {
 }
 
 // New function to send email using Resend
-async function sendAnalysisEmail(filename, analysis) {  
- 
+async function sendAnalysisEmail(filename, analysis, pdfBuffer) {  
   try {
     const response = await resend.emails.send({
       from: 'PDF Analysis <info@aldb.mt>', // Use your own domain here
@@ -193,6 +192,12 @@ async function sendAnalysisEmail(filename, analysis) {
           </body>
         </html>
       `,
+      attachments: [
+        {
+          filename: filename,
+          content: pdfBuffer, // Buffer containing the PDF data
+        },
+      ],
     });
     
     return response;
@@ -201,5 +206,4 @@ async function sendAnalysisEmail(filename, analysis) {
     throw new Error('Failed to send email: ' + error.message);
   }
 }
-
 module.exports = router;
