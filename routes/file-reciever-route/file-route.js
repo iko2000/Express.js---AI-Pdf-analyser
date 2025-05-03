@@ -192,14 +192,19 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
           </head>
           <body>
             <div class="container">
-              <h1>Safety Document Analysis</h1>
-              <p>An analysis has been completed for the document: <strong>${filename}</strong></p>
+             <h1>Please find attached the Health & Safety Inspection Report related to the ongoing project referenced above. This report has been compiled in accordance with the scope of services agreed upon with the commissioning client and reflects
+ the site conditions observed during the time of the inspection.</h1>
               <p>Recipients should be: ${externalrecipients} </p>
-              <h2>Recommended Improvements:</h2>
+              <h2>Below is a summary of key findings noted during the visit:</h2>
               <div class="analysis">
                 ${analysis.replace(/\n/g, '<br>')}
               </div>
-              
+              <h5>
+              The purpose of this report is to provide a clear and current snapshot of the site’s health and safety status and to assist all stakeholders in identifying any corrective or preventive measures required to ensure continued compliance and risk mitigation.
+              We take this opportunity to emphasise that maintaining a safe system of work is a collective responsibility. All parties involved in the project are expected to observe and uphold the applicable safety protocols, legal obligations, and best practices throughout the duration of the works.
+              Should you require any further clarification or wish to discuss any aspect of the report, please do not hesitate to get in touch. 
+              Thank you for your continued collaboration.
+              </h5>
               <div class="footer">
                 <p>This is an automated message sent by ALDB&Associates</p>
               </div>
