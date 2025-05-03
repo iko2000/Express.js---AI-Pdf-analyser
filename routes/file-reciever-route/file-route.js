@@ -194,7 +194,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
             <div class="container">
              <h3>Please find attached the Health & Safety Inspection Report related to the ongoing project referenced above. This report has been compiled in accordance with the scope of services agreed upon with the commissioning client and reflects
  the site conditions observed during the time of the inspection.</h3>
-              <p>Recipients should be: ${externalrecipients} </p>
+              <p>Recipients should be: ${externalrecipients[0]} </p>
               <h4>Below is a summary of key findings noted during the visit:</h4>
               <div class="analysis">
                 ${analysis.replace(/\n/g, '<br>')}
