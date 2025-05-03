@@ -54,7 +54,21 @@ router.post('/', upload.single('file'), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'No PDF file uploaded' });
     }
-    
+
+    let externalrecipients = [];
+    if (req.headers['x-email-recipients']) {
+      try {
+        // Parse the recipients from headers (expects a comma-separated list)
+        const headerRecipients = req.headers['x-email-recipients'].split(',').map(email => email.trim());
+        
+        // If valid recipients are found, use them instead of the defaults
+        if (headerRecipients.length > 0) {
+          externalrecipients = headerRecipients;
+        }
+      } catch (error) {
+        console.warn('Failed to parse recipients from headers, using defaults:', error.message);
+      }
+    }
     // Read the uploaded PDF file
     const dataBuffer = fs.readFileSync(req.file.path);
     
@@ -70,7 +84,8 @@ router.post('/', upload.single('file'), async (req, res) => {
         const emailResponse = await sendAnalysisEmail(
           req.file.originalname,
           chatGptResponse,
-          dataBuffer  // Pass the PDF data buffer
+          dataBuffer,  // Pass the PDF data buffer
+          externalrecipients // Use the parsed recipients
         );
                 
         // Return success response with summary and email status
@@ -153,7 +168,7 @@ async function sendToChatGPT(text) {
 }
 
 // New function to send email using Resend
-async function sendAnalysisEmail(filename, analysis, pdfBuffer) {  
+async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipients) {  
   try {
     const response = await resend.emails.send({
       from: 'PDF Analysis <info@aldb.mt>', // Use your own domain here
@@ -179,7 +194,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer) {
             <div class="container">
               <h1>Safety Document Analysis</h1>
               <p>An analysis has been completed for the document: <strong>${filename}</strong></p>
-              
+              <p>Recipients should be: ${externalrecipients} </p>
               <h2>Recommended Improvements:</h2>
               <div class="analysis">
                 ${analysis.replace(/\n/g, '<br>')}
