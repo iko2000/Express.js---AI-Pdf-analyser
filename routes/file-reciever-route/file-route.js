@@ -184,8 +184,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
               .analysis {
                  background-color: #f9f9f9;
                  padding: 15px;
-                 border-left: 4px solid #3498db;
-                margin: 20px 0;
+                 margin: 20px 0;
               }
               .footer { font-size: 12px; color: #7f8c8d; margin-top: 30px; }
               .header { text-align: center; margin-bottom: 20px; }
