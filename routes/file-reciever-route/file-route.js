@@ -147,7 +147,7 @@ async function sendToChatGPT(text) {
           },
           {
             role: 'user',
-            content: `Analyze this document and give me a what can be done to improve situation on site: \n\n${text}`
+            content: `Analyze this document and give me a what can be done to improve situation on site do not use 1) when needing to list, use bullet points: \n\n${text}`
           }
         ],
         max_tokens: 800
@@ -177,7 +177,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
         <html>
           <head>
             <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              body { font-family: Arial, sans-serif; line-height: 1.5; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
               h1 { color: #2c3e50; }
               .analysis {
@@ -185,6 +185,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
                  padding: 15px;
                  margin: 20px 0;
               }
+              .image { max-width: 300px; height: auto; }
               .footer { font-size: 12px; color: #7f8c8d; margin-top: 30px; }
               .header { text-align: center; margin-bottom: 20px; }
               .header img { max-width: 100%; height: auto; }
@@ -213,12 +214,12 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
               </p>
               <div class="signature">
                 <p class="bold">ALDB Team</p>
-                <p><span class="bold">E</span> info@aldb.mt</p>
-                <p><span class="bold">M</span> +356 9900 3486 / (+356) 9972 7305</p>
-                <p><span class="bold">T</span> +356 2099 9831</p>
-                <p><span class="bold">A</span> Paul Walker, Court B, Office 1, Triq iz-Żnuber, Mosta MST 2223</p>
+                <p><span class="bold">E </span>info@aldb.mt</p>
+                <p><span class="bold">M </span>+356 9900 3486 / (+356) 9972 7305</p>
+                <p><span class="bold">T </span>+356 2099 9831</p>
+                <p><span class="bold">A </span>Paul Walker, Court B, Office 1, Triq iz-Żnuber, Mosta MST 2223</p>
                 
-                <img src="https://express-js-ai-pdf-analyser.onrender.com/images/footer.png" alt="Signature" />
+                <img src="https://express-js-ai-pdf-analyser.onrender.com/images/footer.png" alt="Signature" class="image" />
                 
                 <div class="disclaimer">
                   <p><strong>All information provided to ALDB & Associates Ltd is handled in strict compliance with GDPR regulations and other applicable data protection laws. Your data is securely stored and used solely for the purpose of fulfilling our contractual obligations.</strong> The content of this email is confidential and intended for the recipient specified in message only.
