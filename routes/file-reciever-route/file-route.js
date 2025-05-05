@@ -7,6 +7,7 @@ const path = require('path');
 const axios = require('axios');
 require('dotenv').config();
 const { Resend } = require('resend'); // Import Resend
+const aldbimage = require('../../public/images/aldb.png');
 
 // Initialize Resend with your API key
 
@@ -150,7 +151,7 @@ async function sendToChatGPT(text) {
             content: `Analyze this document and give me a what can be done to improve situation on site: \n\n${text}`
           }
         ],
-        max_tokens: 500
+        max_tokens: 800
       },
       {
         headers: {
@@ -166,14 +167,13 @@ async function sendToChatGPT(text) {
     throw new Error('Failed to get analysis from ChatGPT: ' + (error.response?.data?.error?.message || error.message));
   }
 }
-
 // New function to send email using Resend
-async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipients) {  
+async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipients) {
   try {
     const response = await resend.emails.send({
       from: 'PDF Analysis <info@aldb.mt>', // Use your own domain here
       to: ["shengelia1800@gmail.com", "charlot.caruana@aldb.mt", "clint.mallia@aldb.mt", "aldo.busuttil@aldb.mt"],
-      subject: `Safety Document Analysis: ${filename}`,
+      subject: `Site Inspection Report from ALDB&Associates`,
       html: `
         <html>
           <head>
@@ -181,31 +181,35 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
               h1 { color: #2c3e50; }
-              .analysis { 
-                background-color: #f9f9f9; 
-                padding: 15px; 
-                border-left: 4px solid #3498db;
+              .analysis {
+                 background-color: #f9f9f9;
+                 padding: 15px;
+                 border-left: 4px solid #3498db;
                 margin: 20px 0;
               }
               .footer { font-size: 12px; color: #7f8c8d; margin-top: 30px; }
+              .header { text-align: center; margin-bottom: 20px; }
+              .header img { max-width: 100%; height: auto; }
             </style>
           </head>
           <body>
             <div class="container">
-             <h3>Please find attached the Health & Safety Inspection Report related to the ongoing project referenced above. This report has been compiled in accordance with the scope of services agreed upon with the commissioning client and reflects
- the site conditions observed during the time of the inspection.</h3>
+              <div class="header">
+                <img src="${aldbimage}" alt="ALDB Associates - Environment Health & Safety" />
+              </div>
+              <h3>Please find attached the Health & Safety Inspection Report related to the ongoing project referenced above. This report has been compiled in accordance with the scope of services agreed upon with the commissioning client and reflects the site conditions observed during the time of the inspection.</h3>
               <p>Recipients should be: ${externalrecipients[0]} </p>
               <h4>Below is a summary of key findings noted during the visit:</h4>
               <div class="analysis">
                 ${analysis.replace(/\n/g, '<br>')}
               </div>
               <h5>
-              The purpose of this report is to provide a clear and current snapshot of the site’s health and safety status and to assist all stakeholders in identifying any corrective or preventive measures required to ensure continued compliance and risk mitigation.
-              We take this opportunity to emphasise that maintaining a safe system of work is a collective responsibility. All parties involved in the project are expected to observe and uphold the applicable safety protocols, legal obligations, and best practices throughout the duration of the works.
-              Should you require any further clarification or wish to discuss any aspect of the report, please do not hesitate to get in touch. 
-              Thank you for your continued collaboration.
+             All stakeholders are strongly encouraged to review the full report to ensure appropriate follow-up and compliance.
+             We take this opportunity to emphasise that maintaining a safe system of work is a collective responsibility.
+             All parties involved in the project are expected to observe and uphold the applicable safety protocols, legal obligations, and best practices throughout the duration of the works.
+             Should you require any further clarification or wish to discuss any aspect of the report, please do not hesitate to get in touch.
+             Thank you for your continued collaboration.
               </h5>
-              
             </div>
           </body>
         </html>
