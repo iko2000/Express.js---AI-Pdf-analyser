@@ -7,7 +7,7 @@ const path = require('path');
 const axios = require('axios');
 require('dotenv').config();
 const { Resend } = require('resend'); // Import Resend
-const aldbimage = require('../../public/images/aldb.png');
+const aldbimage = require('../../assets/aldbimage.png');
 
 // Initialize Resend with your API key
 
