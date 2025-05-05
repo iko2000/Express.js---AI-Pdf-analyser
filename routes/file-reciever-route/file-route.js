@@ -188,6 +188,10 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
               .footer { font-size: 12px; color: #7f8c8d; margin-top: 30px; }
               .header { text-align: center; margin-bottom: 20px; }
               .header img { max-width: 100%; height: auto; }
+              .signature { margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px; font-size: 12px; color: #666; }
+              .signature p { margin: 5px 0; }
+              .signature .bold { font-weight: bold; }
+              .disclaimer { font-size: 10px; color: #999; margin-top: 15px; font-style: italic; }
             </style>
           </head>
           <body>
@@ -214,6 +218,24 @@ Should you require any further clarification or wish to discuss any aspect of th
 
 Thank you for your continued collaboration.
               </h5>
+              <div class="signature">
+                <p class="bold">ALDB Team</p>
+                <p>________________________________________________________</p>
+                <p><span class="bold">E</span> info@aldb.mt</p>
+                <p><span class="bold">M</span> +356 9900 3486 / (+356) 9972 7305</p>
+                <p><span class="bold">T</span> +356 2099 9831</p>
+                <p><span class="bold">A</span> Paul Walker, Court B, Office 1, Triq iz-Żnuber, Mosta MST 2223</p>
+                
+                <!-- If you have a signature image, add it here -->
+                <!-- <p><img src="https://express-js-ai-pdf-analyser.onrender.com/images/footer.png" alt="Signature" /></p> -->
+                
+                <div class="disclaimer">
+                  <p><strong>All information provided to ALDB & Associates Ltd is handled in strict compliance with GDPR regulations and other applicable data protection laws. Your data is securely stored and used solely for the purpose of fulfilling our contractual obligations.</strong> The content of this email is confidential and intended for the recipient specified in message only.
+                  It is strictly forbidden to share any part of this message with any third party, without a written consent of the sender.
+                  If you received this message by mistake, please reply to this message and follow with its deletion,
+                  so that we can ensure such a mistake does not occur in the future. Consider the environment before printing this email.</p>
+                </div>
+              </div>
             </div>
           </body>
         </html>
