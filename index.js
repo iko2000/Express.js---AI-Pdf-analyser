@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fileroute = require('./routes/file-reciever-route/file-route')
 const Datasaverroute = require('./routes/dataretriever/data-route');
+const path = require('path');
 
 require('dotenv').config();
 app.use(cors());
@@ -18,6 +19,7 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
     res.send('Hello, world!'); // Send 'Hello, world!' as response

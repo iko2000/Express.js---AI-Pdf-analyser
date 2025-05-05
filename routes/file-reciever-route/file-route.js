@@ -193,7 +193,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
           <body>
             <div class="container">
               <div class="header">
-                <img src="../../assets/aldbimage.png" alt="ALDB Associates - Environment Health & Safety" />
+                <img src="https://express-js-ai-pdf-analyser.onrender.com/images/aldbimage.png" alt="ALDB Associates - Environment Health & Safety" />
               </div>
               <h3>Please find attached the Health & Safety Inspection Report related to the ongoing project referenced above. This report has been compiled in accordance with the scope of services agreed upon with the commissioning client and reflects the site conditions observed during the time of the inspection.</h3>
               <p>Recipients should be: ${externalrecipients[0]} </p>
