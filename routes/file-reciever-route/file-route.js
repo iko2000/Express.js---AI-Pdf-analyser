@@ -196,31 +196,23 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
           </head>
           <body>
             <div class="container">
-              <div class="header">
-                <img src="https://express-js-ai-pdf-analyser.onrender.com/images/aldbimage.png" alt="ALDB Associates - Environment Health & Safety" />
-              </div>
-              <h3>Please find attached the Health & Safety Inspection Report related to the ongoing project referenced above.</h3>
-              <h3>This report has been prepared in line with the scope of services agreed upon with the commissioning client and reflects the site conditions as observed at the time of the inspection.</h3>
+              <p>Please find attached the Health & Safety Inspection Report related to the ongoing project referenced above.</p>
+              <p>This report has been prepared in line with the scope of services agreed upon with the commissioning client and reflects the site conditions as observed at the time of the inspection.</p>
               <p>Recipients should be: ${externalrecipients[0]} - PLEASE IGNORE THIS PART AS I AM TESTING IT.</p>
-              <h4>Below is a summary of key findings noted during the visit:</h4>
+              <p>Below is a summary of key findings noted during the visit:</p>
               <div class="analysis">
                 ${analysis.replace(/\n/g, '<br>')}
               </div>
-              <h5>
-             
+              <p>All stakeholders are strongly encouraged to review the full report to ensure appropriate follow-up and compliance.</p>
+              <p>We take this opportunity to emphasise that maintaining a safe system of work is a collective responsibility.</p>
+              <p>All parties involved in the project are expected to observe and uphold the applicable safety protocols, legal obligations, and best practices throughout the duration of the works.</p>
+              <p>Thank you for your continued collaboration.</p>
 
-All stakeholders are strongly encouraged to review the full report to ensure appropriate follow-up and compliance.
 
-We take this opportunity to emphasise that maintaining a safe system of work is a collective responsibility.
 
-All parties involved in the project are expected to observe and uphold the applicable safety protocols, legal obligations, and best practices throughout the duration of the works.
-Should you require any further clarification or wish to discuss any aspect of the report, please do not hesitate to get in touch.
-
-Thank you for your continued collaboration.
-              </h5>
+              </p>
               <div class="signature">
                 <p class="bold">ALDB Team</p>
-                <p>________________________________________________________</p>
                 <p><span class="bold">E</span> info@aldb.mt</p>
                 <p><span class="bold">M</span> +356 9900 3486 / (+356) 9972 7305</p>
                 <p><span class="bold">T</span> +356 2099 9831</p>
