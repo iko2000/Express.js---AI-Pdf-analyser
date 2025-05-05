@@ -226,7 +226,7 @@ Thank you for your continued collaboration.
                 <p><span class="bold">T</span> +356 2099 9831</p>
                 <p><span class="bold">A</span> Paul Walker, Court B, Office 1, Triq iz-Żnuber, Mosta MST 2223</p>
                 
-                <p><img src="https://express-js-ai-pdf-analyser.onrender.com/images/footer.png" alt="Signature" /></p>
+                <img src="https://express-js-ai-pdf-analyser.onrender.com/images/footer.png" alt="Signature" />
                 
                 <div class="disclaimer">
                   <p><strong>All information provided to ALDB & Associates Ltd is handled in strict compliance with GDPR regulations and other applicable data protection laws. Your data is securely stored and used solely for the purpose of fulfilling our contractual obligations.</strong> The content of this email is confidential and intended for the recipient specified in message only.
