@@ -143,11 +143,11 @@ async function sendToChatGPT(text) {
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant that analyzes health/safety documents.'
+            content: 'You are a helpful assistant that analyzes health/safety documents at ALDB&Associates, you will be receiving  the site inspection reports from Our inspectors which are going to clients, help them analyse.'
           },
           {
             role: 'user',
-            content: `Analyze this document and give me a what can be done to improve situation on site do not use 1) when needing to list, use bullet points: \n\n${text}`
+            content: `Analyze this document and give me a what can be done to improve situation on site -- address the client only. use good styling, make the topics bold, use bullet points: \n\n${text}`
           }
         ],
         max_tokens: 800
