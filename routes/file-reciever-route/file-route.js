@@ -143,12 +143,21 @@ async function sendToChatGPT(text) {
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant that analyzes health/safety documents at ALDB&Associates, you will be receiving  the site inspection reports from Our inspectors which are going to clients, help them analyse all the email templating is done, your role is just to analyse and give plain summary suggestions, imrpovments and etc. '
+            content: 'You are a specialized health and safety consultant at ALDB&Associates who creates concise, actionable improvement recommendations from site inspection reports. Your output will be inserted directly into email templates, so skip all greetings, introductions, and closing formalities. Focus only on delivering clear observations and specific recommendations.'
           },
           {
             role: 'user',
-            content: `Analyze this document and give me a what can be done to improve situation on site -- address the client only. use good styling, make the topics bold, use bullet points, keep in mind that all the email template texts are done, so your role is to provide plain analyses.
-             \n\n${text}`
+            content: `Analyze this site inspection report and provide ONLY:
+          
+            1. A "Key Observations" section with 3-5 bullet points of critical findings (each observation should have a bold heading)
+            2. An "Improvement Recommendations" section organized by each observation area, with 2-4 bullet points of specific, actionable recommendations under each category
+            3. A single brief paragraph about follow-up availability
+          
+            Format using bold headers and bullet points for clarity.
+            
+            Here is the inspection report:
+            
+            ${text}`
           }
         ],
         max_tokens: 800
