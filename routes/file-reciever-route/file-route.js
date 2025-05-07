@@ -154,7 +154,7 @@ async function sendToChatGPT(text) {
             3. A single brief paragraph about follow-up availability
           
             Format using bold headers and bullet points for clarity.
-            
+            Do not make it obvius that it is written by AI, act like human have done this analyeses.
             Here is the inspection report:
             
             ${text}`
@@ -212,7 +212,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
               <p>Recipients should be: ${externalrecipients[0]} - PLEASE IGNORE THIS PART AS I AM TESTING IT.</p>
               <p>Below is a summary of key findings noted during the visit:</p>
               <div class="analysis">
-                ${analysis.replace(/\n/g, '<br>')}
+              ${analysis.replace(/\n/g, '<br>').replace(/\*/g, '')}
               </div>
               <p>All stakeholders are strongly encouraged to review the full report to ensure appropriate follow-up and compliance.</p>
               <p>We take this opportunity to emphasise that maintaining a safe system of work is a collective responsibility.</p>
