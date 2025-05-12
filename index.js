@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fileroute = require('./routes/file-reciever-route/file-route')
 const Datasaverroute = require('./routes/dataretriever/data-route');
+const Oneoffroute = require('./routes/oneoff/one-off');
 const path = require('path');
 
 require('dotenv').config();
@@ -27,6 +28,8 @@ app.get('/', (req, res) => {
 
 app.use('/fileroute', fileroute);
 app.use('/datasaver', Datasaverroute);
+app.use('/oneoff', Oneoffroute);
+
 
 
 
