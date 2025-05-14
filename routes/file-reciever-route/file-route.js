@@ -81,20 +81,18 @@ router.post('/', upload.single('file'), async (req, res) => {
       const fileName = `report-${reportNum}-${Date.now()}${fileExt}`;
       
       const { data, error } = await supabase.storage
-        .from(`uploads/${fileName}`)
+        .from('client-bucket')
         .upload(fileName, dataBuffer, {
           contentType: 'application/pdf',
           cacheControl: '3600'
         });
-
-        console.log(error.message)
       
       if (error) throw error;
       
       // Get the public URL of the uploaded file
       const { data: urlData } = supabase.storage
-        .from('clients')
-        .getPublicUrl(`uploads/${fileName}`);
+        .from('client-bucket')
+        .getPublicUrl(fileName);
       
       supabaseFileUrl = urlData.publicUrl;
       
@@ -227,7 +225,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
   try {
     const response = await resend.emails.send({
       from: 'PDF Analysis <info@aldb.mt>', // Use your own domain here
-      to: ["shengelia1800@gmail.com"],
+      to: ["shengelia1800@gmail.com", "charlot.caruana@aldb.mt", "clint.mallia@aldb.mt", "aldo.busuttil@aldb.mt"],
       subject: `Site Inspection Report from ALDB&Associates`,
       html: `
         <html>
