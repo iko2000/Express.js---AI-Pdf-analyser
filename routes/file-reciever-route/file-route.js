@@ -86,6 +86,8 @@ router.post('/', upload.single('file'), async (req, res) => {
           contentType: 'application/pdf',
           cacheControl: '3600'
         });
+
+        console.log(error.message)
       
       if (error) throw error;
       
