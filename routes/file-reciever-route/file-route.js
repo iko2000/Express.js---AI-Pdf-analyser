@@ -81,7 +81,7 @@ router.post('/', upload.single('file'), async (req, res) => {
       const fileName = `report-${reportNum}-${Date.now()}${fileExt}`;
       
       const { data, error } = await supabase.storage
-        .from('clients')
+        .from(`uploads/${fileName}`)
         .upload(fileName, dataBuffer, {
           contentType: 'application/pdf',
           cacheControl: '3600'
@@ -94,7 +94,7 @@ router.post('/', upload.single('file'), async (req, res) => {
       // Get the public URL of the uploaded file
       const { data: urlData } = supabase.storage
         .from('clients')
-        .getPublicUrl(fileName);
+        .getPublicUrl(`uploads/${fileName}`);
       
       supabaseFileUrl = urlData.publicUrl;
       
