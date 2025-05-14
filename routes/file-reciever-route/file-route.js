@@ -7,8 +7,9 @@ const path = require('path');
 const axios = require('axios');
 require('dotenv').config();
 const { Resend } = require('resend'); // Import Resend
+const { createClient } = require('@supabase/supabase-js'); // Add Supabase client
+const supabase = require("../../db/db");
 
-// Initialize Resend with your API key
 
 router.use(express.json());
 const resend = new Resend(process.env.RESEND_API_KEY); // Make sure to set this environment variable
@@ -56,6 +57,7 @@ router.post('/', upload.single('file'), async (req, res) => {
     }
 
     let externalrecipients = [];
+    let reportNum = req.headers['x-report-num'] || 'Unknown Report Number';
     if (req.headers['x-email-recipients']) {
       try {
         // Parse the recipients from headers (expects a comma-separated list)
@@ -71,6 +73,42 @@ router.post('/', upload.single('file'), async (req, res) => {
     }
     // Read the uploaded PDF file
     const dataBuffer = fs.readFileSync(req.file.path);
+    
+    // Upload the PDF to Supabase storage
+    let supabaseFileUrl = null;
+    try {
+      const fileExt = path.extname(req.file.originalname);
+      const fileName = `report-${reportNum}-${Date.now()}${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('clients')
+        .upload(fileName, dataBuffer, {
+          contentType: 'application/pdf',
+          cacheControl: '3600'
+        });
+      
+      if (error) throw error;
+      
+      // Get the public URL of the uploaded file
+      const { data: urlData } = supabase.storage
+        .from('clients')
+        .getPublicUrl(fileName);
+      
+      supabaseFileUrl = urlData.publicUrl;
+      
+      // Update the intelligentdata table with the file URL
+      const { error: updateError } = await supabase
+        .from('inteligentdata')
+        .update({ url: supabaseFileUrl })
+        .eq('report_number', reportNum);
+      
+      if (updateError) {
+        console.error('Error updating database:', updateError);
+      }
+    } catch (supabaseError) {
+      console.error('Supabase storage error:', supabaseError);
+      // Continue with the process even if Supabase upload fails
+    }
     
     // Parse the PDF content 
     const data = await PDFParser(dataBuffer);
@@ -95,6 +133,8 @@ router.post('/', upload.single('file'), async (req, res) => {
           summary: chatGptResponse,
           emailSent: true,
           emailId: emailResponse.id,
+          supabaseUpload: supabaseFileUrl ? true : false,
+          supabaseFileUrl: supabaseFileUrl,
           message: 'PDF content has been analyzed and emailed with attachment'
         });
       } catch (emailError) {
@@ -106,6 +146,8 @@ router.post('/', upload.single('file'), async (req, res) => {
           summary: chatGptResponse,
           emailSent: false,
           emailError: emailError.message,
+          supabaseUpload: supabaseFileUrl ? true : false,
+          supabaseFileUrl: supabaseFileUrl,
           message: 'PDF content has been analyzed but email sending failed'
         });
       }
@@ -115,7 +157,9 @@ router.post('/', upload.single('file'), async (req, res) => {
         error: 'Failed to analyze PDF with ChatGPT',
         details: apiError.message,
         filename: req.file.originalname,
-        filesize: req.file.size
+        filesize: req.file.size,
+        supabaseUpload: supabaseFileUrl ? true : false,
+        supabaseFileUrl: supabaseFileUrl
       });
     }
     
