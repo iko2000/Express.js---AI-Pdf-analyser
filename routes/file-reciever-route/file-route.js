@@ -76,6 +76,7 @@ router.post('/', upload.single('file'), async (req, res) => {
     
     // Upload the PDF to Supabase storage
     let supabaseFileUrl = null;
+    console.log("Uploading to Supabase storage...");
     try {
       const fileExt = path.extname(req.file.originalname);
       const fileName = `report-${reportNum}-${Date.now()}${fileExt}`;
