@@ -258,9 +258,9 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
               <div class="analysis">
               ${analysis.replace(/\n/g, '<br>').replace(/\*/g, '')}
               </div>
-              <p>All stakeholders are strongly encouraged to review the full report to ensure appropriate follow-up and compliance.</p>
+              <p>All duty holders are strongly encouraged to review the full report to ensure appropriate follow-up and compliance.</p>
               <p>We take this opportunity to emphasise that maintaining a safe system of work is a collective responsibility.</p>
-              <p>All parties involved in the project are expected to observe and uphold the applicable safety protocols, legal obligations, and best practices throughout the duration of the works.</p>
+              <p>All duty holders involved in the project are expected to observe and uphold the applicable safety protocols, legal obligations, and best practices throughout the duration of the works.</p>
               <p>Thank you for your continued collaboration.</p>
 
 
