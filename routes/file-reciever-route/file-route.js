@@ -225,7 +225,7 @@ async function sendAnalysisEmail(filename, analysis, pdfBuffer, externalrecipien
   try {
     const response = await resend.emails.send({
       from: 'PDF Analysis <info@aldb.mt>', // Use your own domain here
-      to: ["shengelia1800@gmail.com", "charlot.caruana@aldb.mt", "clint.mallia@aldb.mt", "aldo.busuttil@aldb.mt"],
+      to: ["shengelia1800@gmail.com"],
       subject: `Site Inspection Report from ALDB&Associates`,
       html: `
         <html>
